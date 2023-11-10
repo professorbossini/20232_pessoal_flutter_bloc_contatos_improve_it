@@ -1,10 +1,10 @@
 import 'dart:async';
 mixin Validators{
-  static final regExpNome = RegExp(r'^[A-Z][a-z]{2,} [A-Za-z]+$');
-  static final regExpNumero = RegExp(r'^(\d\d)[0-9]{5}-[0-9]{4}$');
+  static final regExpNome = RegExp('[A-Z][a-z]{2,} [A-Za-z]+');
+  static final regExpNumero = RegExp('^\\([0-9]{2}\\) [0-9]{5}-[0-9]{4}\$');
   final validarNome = StreamTransformer<String, String>.fromHandlers(
     handleData: (nome, sink){
-      if (regExpNome.hasMatch(nome)){
+      if (regExpNome.allMatches(nome).length == 1){
         sink.add(nome);
       } 
       else {
@@ -14,7 +14,7 @@ mixin Validators{
   );
   final validarNumero = StreamTransformer<String, String>.fromHandlers(
     handleData: (numero, sink){
-      if (regExpNumero.hasMatch(numero)){
+      if (regExpNumero.allMatches(numero).length == 1){
         sink.add(numero);
       } 
       else {
