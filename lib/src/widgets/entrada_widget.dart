@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../blocs/bloc.dart';
 class EntradaWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -13,10 +14,7 @@ class EntradaWidget extends StatelessWidget{
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: ElevatedButton(
-                    child: Text('Salvar'),
-                    onPressed: (){},
-                  ),
+                  child: submitButton(),
                 ),
               ],
             ),
@@ -27,26 +25,42 @@ class EntradaWidget extends StatelessWidget{
   }
 
   Widget nomeField(){
-    return TextField(
-      keyboardType: TextInputType.name,
-      decoration: InputDecoration(
-        labelText: 'Nome',
-        hintText: 'Digite seu nome',
-      ),
+    
+    return StreamBuilder(
+      stream: bloc.nome,
+      builder: (context, snapshot){
+        return TextField(
+          onChanged: bloc.mudarNome,
+          keyboardType: TextInputType.name,
+          decoration: InputDecoration(
+            labelText: 'Nome',
+            hintText: 'Digite seu nome',
+            errorText: snapshot.hasError ? snapshot.error.toString() : null,
+          ),
+        );
+      },
     );
+    
   }
 
   Widget numeroField(){
-    return TextField(
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-        labelText: 'Número',
-        hintText: 'Digite seu número',
-      ),
+    return StreamBuilder(
+      stream: bloc.numero,
+      builder: (context, snapshot){
+        return TextField(
+          onChanged: bloc.mudarNumero,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            labelText: 'Número',
+            hintText: 'Digite seu número',
+            errorText: snapshot.hasError ? snapshot.error.toString() : null,
+          ),
+        );
+      },
     );
   }
 
-  Widget submitField(){
+  Widget submitButton(){
     return ElevatedButton(
       child: Text('Salvar'),
       onPressed: (){},
