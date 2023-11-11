@@ -21,14 +21,16 @@ class ContatoWidget extends StatelessWidget{
                 fontWeight: FontWeight.bold
               ),
             ),
-            SizedBox(height: 10.0),
-            Text(
+            Container(
+              margin: EdgeInsets.only(top: 10.0),
+              child:Text(
               numero,
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold
               ),
-            ),
+            )
+            )
           ],
         ),
       ),

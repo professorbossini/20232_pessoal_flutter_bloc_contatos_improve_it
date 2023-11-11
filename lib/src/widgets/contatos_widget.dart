@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import '../blocs/bloc.dart';
-class EntradaWidget extends StatelessWidget{
+import '../models/contato_model.dart';
+import '../widgets/contato_widget.dart';
+class ContatosWidget extends StatelessWidget{
+  String nomeAtual = '';
+  String numeroAtual = '';
+  List<Contato> contatos = [Contato('Ana', '1')];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,6 +24,7 @@ class EntradaWidget extends StatelessWidget{
               ],
             ),
           ),
+          contatosList()
         ],
       )
     ); 
@@ -30,7 +36,10 @@ class EntradaWidget extends StatelessWidget{
       stream: bloc.nome,
       builder: (context, snapshot){
         return TextField(
-          onChanged: bloc.mudarNome,
+          onChanged: (valor){
+            bloc.mudarNome(valor);
+            nomeAtual = valor;
+          },
           keyboardType: TextInputType.name,
           decoration: InputDecoration(
             labelText: 'Nome',
@@ -48,7 +57,10 @@ class EntradaWidget extends StatelessWidget{
       stream: bloc.numero,
       builder: (context, snapshot){
         return TextField(
-          onChanged: bloc.mudarNumero,
+          onChanged: (valor){
+            bloc.mudarNumero(valor);
+            numeroAtual = valor;
+          },
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             labelText: 'Número',
@@ -63,7 +75,27 @@ class EntradaWidget extends StatelessWidget{
   Widget submitButton(){
     return ElevatedButton(
       child: Text('Salvar'),
-      onPressed: (){},
+      onPressed: () => bloc.adicionarContato(Contato(nomeAtual, numeroAtual)),
+    );
+  }
+
+  Widget contatosList(){
+    return Container(
+      margin: EdgeInsets.only(top: 12.0),
+      child: StreamBuilder(
+        stream: bloc.contatos,
+        builder: (context, snapshot){
+          if (snapshot.hasData){
+            return Column(
+              children: snapshot.data!.map<Widget>(
+                (contato) => ContatoWidget(contato.nome, contato.numero)).toList(),
+            );
+          }
+          else {
+            return Text('Nenhum contato adicionado');
+          }
+        },
+      ),
     );
   }
 }
